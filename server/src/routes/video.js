@@ -1,18 +1,123 @@
-import express from "express";
+import express from 'express'
+import { PrismaClient } from '@prisma/client'
+import { protect } from '../middleware/authorization'
+
+const prisma = new PrismaClient()
 
 function getVideoRoutes() {
-  const router = express.Router();
+  const router = express.Router()
 
-  return router;
+  router.get('/', getRecommendedVideos)
+  router.get('/trending', getTrendingVideos)
+  router.get('/search', searchVideos)
+  router.post('/', protect, addVideo)
+
+  return router
 }
 
-async function getRecommendedVideos(req, res) {}
+const getVideoViews = async (videos) => {
+  for (const video of videos) {
+    const views = await prisma.view.count({
+      where: {
+        videoId: {
+          equals: video.id,
+        },
+      },
+    })
 
-async function getTrendingVideos(req, res) {}
+    video.views = views
+  }
 
-async function searchVideos(req, res, next) {}
+  return videos
+}
 
-async function addVideo(req, res) {}
+const getRecommendedVideos = async (req, res) => {
+  let videos = await prisma.video.findMany({
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  if (!videos.length) {
+    return res.status(200).json({ videos })
+  }
+
+  videos = await getVideoViews(videos)
+
+  res.status(200).json({ videos })
+}
+
+const getTrendingVideos = async (req, res) => {
+  let videos = await prisma.video.findMany({
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  if (!videos.length) {
+    return res.status(200).json({ videos })
+  }
+
+  videos = await getVideoViews(videos)
+  videos.sort((a, b) => b.views - a.views)
+
+  res.status(200).json({ videos })
+}
+
+const searchVideos = async (req, res, next) => {
+  const query = req.query.query
+
+  if (!query) {
+    return next({
+      message: 'Please enter a search query',
+      statusCode: 400,
+    })
+  }
+
+  let videos = await prisma.video.findMany({
+    include: { user: true },
+    where: {
+      OR: [
+        { title: { contains: query, mode: 'insensitive' } },
+        { description: { contains: query, mode: 'insensitive' } },
+      ],
+    },
+  })
+
+  if (!videos.length) {
+    return res.status(200).json({ videos })
+  }
+
+  videos = await getVideoViews(videos)
+
+  res.status(200).json({ videos })
+}
+
+const addVideo = async (req, res) => {
+  const { title, description, url, thumbnail } = req.body
+
+  const video = await prisma.video.create({
+    data: {
+      title,
+      description,
+      url,
+      thumbnail,
+      user: {
+        connect: {
+          id: req.user.id,
+        },
+      },
+    },
+  })
+
+  res.status(200).json({ video })
+}
 
 async function addComment(req, res, next) {}
 
@@ -28,4 +133,4 @@ async function getVideo(req, res, next) {}
 
 async function deleteVideo(req, res) {}
 
-export { getVideoRoutes };
+export { getVideoRoutes }
