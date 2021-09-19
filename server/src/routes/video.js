@@ -25,7 +25,7 @@ function getVideoRoutes() {
   return router
 }
 
-const getVideoViews = async (videos) => {
+export const getVideoViews = async (videos) => {
   for (const video of videos) {
     const views = await prisma.view.count({
       where: {
