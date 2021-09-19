@@ -3,7 +3,25 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function getAuthUser(req, res, next) {}
+export const getAuthUser = async (req, res, next) => {
+  if (!req.headers.authorization) {
+    req.user = null
+    return next()
+  }
+
+  const token = req.headers.authorization
+  const decodedUser = jwt.verify(token, process.env.JWT_SECRET)
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: decodedUser.id,
+    },
+    include: { videos: true },
+  })
+
+  req.user = user
+  next()
+}
 
 export const protect = async (req, res, next) => {
   if (!req.headers.authorization) {
@@ -15,11 +33,11 @@ export const protect = async (req, res, next) => {
 
   try {
     const token = req.headers.authorization
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const decodedUser = jwt.verify(token, process.env.JWT_SECRET)
 
     const user = await prisma.user.findUnique({
       where: {
-        id: decoded.id,
+        id: decodedUser.id,
       },
       include: {
         videos: true,
