@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
 import { protect } from '../middleware/authorization'
-import { route } from 'express/lib/router'
 
 const prisma = new PrismaClient()
 
@@ -43,9 +42,24 @@ const googleLogin = async (req, res) => {
 }
 
 const me = async (req, res) => {
-  console.log(req.user)
+  const subscriptions = await prisma.subscription.findMany({
+    where: {
+      subscriberId: { equals: req.user.id },
+    },
+  })
 
-  res.status(200).json({ user: req.user })
+  const channelIds = subscriptions.map((sub) => sub.subscribedToId)
+
+  const channels = await prisma.user.findMany({
+    where: {
+      id: { in: channelIds },
+    },
+  })
+
+  const user = req.user
+  user.channels = channels
+
+  res.status(200).json({ user })
 }
 
 const signOut = (req, res) => {
