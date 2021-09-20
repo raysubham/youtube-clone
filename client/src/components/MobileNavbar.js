@@ -1,29 +1,40 @@
-import React from "react";
-import Wrapper from "../styles/MobileNavbar";
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+import Wrapper from '../styles/MobileNavbar'
 import {
   HistoryIcon,
   HomeIcon,
   SubIcon,
   TrendingIcon,
   WatchIcon,
-} from "./Icons";
+} from './Icons'
 
 function MobileNavbar() {
   return (
     <Wrapper>
-      <div className="icons">
-        <HomeIcon />
+      <div className='icons'>
+        <NavLink exact to='/' activeClassName='active'>
+          <HomeIcon />
+        </NavLink>
 
-        <TrendingIcon />
+        <NavLink to='/feed/trending' activeClassName='active'>
+          <TrendingIcon />
+        </NavLink>
 
-        <SubIcon />
+        <NavLink to='/feed/subscriptions' activeClassName='active'>
+          <SubIcon />
+        </NavLink>
 
-        <HistoryIcon />
+        <NavLink to='/feed/history' activeClassName='active'>
+          <HistoryIcon />
+        </NavLink>
 
-        <WatchIcon />
+        <NavLink to='/feed/liked_videos' activeClassName='active'>
+          <WatchIcon />
+        </NavLink>
       </div>
     </Wrapper>
-  );
+  )
 }
 
-export default MobileNavbar;
+export default MobileNavbar

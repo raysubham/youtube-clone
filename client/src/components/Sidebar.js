@@ -1,5 +1,6 @@
-import React from "react";
-import Wrapper from "../styles/Sidebar";
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+import Wrapper from '../styles/Sidebar'
 import {
   HistoryIcon,
   HomeIcon,
@@ -8,54 +9,68 @@ import {
   SubIcon,
   TrendingIcon,
   VidIcon,
-} from "./Icons";
-import SidebarAuth from "./SidebarAuth";
+} from './Icons'
+import SidebarAuth from './SidebarAuth'
 
 function Sidebar() {
   return (
     <Wrapper>
-      <div className="icon">
-        <HomeIcon />
-        <span>Home</span>
-      </div>
+      <NavLink exact to='/' activeClassName='active'>
+        <div className='icon'>
+          <HomeIcon />
+          <span>Home</span>
+        </div>
+      </NavLink>
 
-      <div className="icon">
-        <TrendingIcon />
-        <span>Trending</span>
-      </div>
+      <NavLink to='/feed/trending' activeClassName='active'>
+        <div className='icon'>
+          <TrendingIcon />
+          <span>Trending</span>
+        </div>
+      </NavLink>
 
-      <div className="icon">
-        <SubIcon />
-        <span>Subscriptions</span>
-      </div>
+      <NavLink to='/feed/subscriptions' activeClassName='active'>
+        <div className='icon'>
+          <SubIcon />
+          <span>Subscriptions</span>
+        </div>
+      </NavLink>
 
-      <div className="divider"></div>
+      <div className='divider'></div>
 
-      <div className="icon">
-        <LibIcon />
-        <span>Library</span>
-      </div>
+      <NavLink to='/feed/library' activeClassName='active'>
+        <div className='icon'>
+          <LibIcon />
+          <span>Library</span>
+        </div>
+      </NavLink>
 
-      <div className="icon">
-        <HistoryIcon />
-        <span>History</span>
-      </div>
+      <NavLink to='/feed/history' activeClassName='active'>
+        <div className='icon'>
+          <HistoryIcon />
+          <span>History</span>
+        </div>
+      </NavLink>
 
-      <div className="icon">
-        <VidIcon />
-        <span>Your videos</span>
-      </div>
+      <NavLink to='/feed/my_videos' activeClassName='active'>
+        <div className='icon'>
+          <VidIcon />
+          <span>Your videos</span>
+        </div>
+      </NavLink>
 
-      <div className="icon">
-        <LikeIcon />
-        <span>Liked videos</span>
-      </div>
+      <NavLink to='/feed/liked_videos' activeClassName='active'>
+        <div className='icon'>
+          <LikeIcon />
+          <span>Liked videos</span>
+        </div>
+      </NavLink>
 
-      <div className="divider"></div>
+      <div className='divider'></div>
 
       <SidebarAuth />
     </Wrapper>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
