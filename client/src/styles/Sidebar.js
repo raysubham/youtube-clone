@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -59,5 +59,5 @@ const Wrapper = styled.div`
         transform: translateX(0);
       `}
   }
-`;
-export default Wrapper;
+`
+export default Wrapper

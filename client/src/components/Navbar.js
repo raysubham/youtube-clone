@@ -1,17 +1,20 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Wrapper from "../styles/Navbar";
-import GoogleAuth from "./GoogleAuth";
-import { AppsIcon, HamburgerIcon, LogoIcon, SettingsIcon } from "./Icons";
-import Search from "./Search";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import Wrapper from '../styles/Navbar'
+import GoogleAuth from './GoogleAuth'
+import { AppsIcon, HamburgerIcon, LogoIcon, SettingsIcon } from './Icons'
+import Search from './Search'
 
-function Navbar() {
+function Navbar({ toggleSidebarOpen }) {
   return (
     <Wrapper>
-      <div className="logo flex-row">
-        <HamburgerIcon className="toggle-navhandler" />
+      <div className='logo flex-row'>
+        <HamburgerIcon
+          className='toggle-navhandler'
+          onClick={toggleSidebarOpen}
+        />
         <span>
-          <Link to="/">
+          <Link to='/'>
             <LogoIcon
               style={{
                 width: 80,
@@ -32,12 +35,12 @@ function Navbar() {
           <SettingsIcon />
         </li>
         <li>
-          {" "}
+          {' '}
           <GoogleAuth />
         </li>
       </ul>
     </Wrapper>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar

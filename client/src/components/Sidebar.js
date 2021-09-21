@@ -12,9 +12,9 @@ import {
 } from './Icons'
 import SidebarAuth from './SidebarAuth'
 
-function Sidebar() {
+function Sidebar({ sidebarOpen }) {
   return (
-    <Wrapper>
+    <Wrapper open={sidebarOpen}>
       <NavLink exact to='/' activeClassName='active'>
         <div className='icon'>
           <HomeIcon />

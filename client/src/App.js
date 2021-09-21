@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import MobileNavbar from './components/MobileNavbar'
@@ -19,10 +19,12 @@ import LikedVideos from './pages/LikedVideos'
 import NotFound from './pages/NotFound'
 
 const App = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const toggleSidebarOpen = () => setSidebarOpen(!sidebarOpen)
   return (
     <>
-      <Navbar />
-      <Sidebar />
+      <Navbar toggleSidebarOpen={toggleSidebarOpen} />
+      <Sidebar sidebarOpen={sidebarOpen} />
       <MobileNavbar />
       <Container>
         <Switch>
